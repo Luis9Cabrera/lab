@@ -1,0 +1,199 @@
+---
+import { Info, ClipboardList, History, CheckCircle2, X } from "lucide-astro";
+---
+
+<!-- REUSABLE MODAL -->
+<div
+  id="studyModal"
+  class="fixed inset-0 bg-primary/40 backdrop-blur-md hidden items-center justify-center z-[100] px-4 py-8 overflow-y-auto"
+>
+  <div
+    id="modalContainer"
+    class="bg-white w-full max-w-4xl rounded-[3rem] shadow-2xl relative transform scale-95 opacity-0 transition-all duration-300 max-h-full flex flex-col"
+  >
+    <!-- Close Button -->
+    <button
+      id="closeModal"
+      class="absolute top-6 right-6 w-12 h-12 rounded-full bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition-all z-10 cursor-pointer"
+      aria-label="Cerrar"
+    >
+      <X class="w-6 h-6" />
+    </button>
+
+    <div class="p-8 md:p-12 overflow-y-auto custom-scrollbar">
+      <div class="flex flex-col lg:flex-row gap-12">
+        <!-- Left Content -->
+        <div class="lg:w-1/2">
+          <span
+            id="mCategory"
+            class="text-secondary font-black tracking-widest uppercase text-sm mb-2 block"
+            >Cargando...</span
+          >
+          <h2
+            id="mTitle"
+            class="text-3xl md:text-4xl font-black text-primary mb-6 leading-tight"
+          >
+            Nombre del Estudio
+          </h2>
+          <p id="mDetails" class="text-slate-600 mb-8 leading-relaxed">
+            Descripción detallada...
+          </p>
+
+          <div class="space-y-4">
+            <h4 class="font-bold text-primary flex items-center gap-2">
+              <ClipboardList class="w-5 h-5 text-secondary" />
+              ¿Qué incluye?
+            </h4>
+            <ul id="mIncludes" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Items will be injected here -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Content (Recommendations) -->
+        <div class="lg:w-1/2 space-y-8">
+          <div class="bg-blue-50/50 p-8 rounded-3xl border border-blue-100/50">
+            <h4 class="font-bold text-primary flex items-center gap-2 mb-6">
+              <History class="w-5 h-5 text-secondary" />
+              Recomendaciones Previas
+            </h4>
+            <div id="mPre" class="space-y-4">
+              <!-- Pre will be injected here -->
+            </div>
+          </div>
+
+          <div
+            class="bg-green-50/30 p-8 rounded-3xl border border-green-100/50"
+          >
+            <h4 class="font-bold text-primary flex items-center gap-2 mb-6">
+              <CheckCircle2 class="w-5 h-5 text-green-500" />
+              Cuidados Post-Estudio
+            </h4>
+            <div id="mPost" class="space-y-4">
+              <!-- Post will be injected here -->
+            </div>
+          </div>
+
+          <a
+            id="mAction"
+            href="https://wa.me/5212331102038"
+            target="_blank"
+            class="w-full bg-primary hover:bg-primary/90 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl transition-all cursor-pointer"
+          >
+            Agendar estudio vía WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("studyModal");
+  const modalContainer = document.getElementById("modalContainer");
+  const closeBtn = document.getElementById("closeModal");
+
+  function openModal(study: any) {
+    if (!modal || !modalContainer) return;
+
+    // Inject data
+    document.getElementById("mCategory")!.textContent = study.category;
+    document.getElementById("mTitle")!.textContent = study.name;
+    document.getElementById("mDetails")!.textContent = study.details;
+
+    // Includes
+    const includesList = document.getElementById("mIncludes")!;
+    includesList.innerHTML = study.includes
+      .map(
+        (i: string) => `
+      <li class="flex items-center gap-2 text-slate-600 text-sm">
+        <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+        ${i}
+      </li>
+    `,
+      )
+      .join("");
+
+    // Pre Recommendations
+    const preContainer = document.getElementById("mPre")!;
+    preContainer.innerHTML = study.preparations
+      .map(
+        (p: string) => `
+      <div class="flex gap-3">
+        <div class="w-6 h-6 rounded-full bg-blue-100 text-primary flex items-center justify-center shrink-0">
+          <span class="text-[10px] font-bold">!</span>
+        </div>
+        <p class="text-sm text-slate-600">${p}</p>
+      </div>
+    `,
+      )
+      .join("");
+
+    // Post Recommendations
+    const postContainer = document.getElementById("mPost")!;
+    postContainer.innerHTML = study.postRecommendations
+      .map(
+        (p: string) => `
+      <div class="flex gap-3">
+        <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+          <span class="text-[10px] font-bold">✓</span>
+        </div>
+        <p class="text-sm text-slate-600">${p}</p>
+      </div>
+    `,
+      )
+      .join("");
+
+    // Show modal
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => {
+      modalContainer.classList.remove("scale-95", "opacity-0");
+      modalContainer.classList.add("scale-100", "opacity-100");
+    }, 10);
+  }
+
+  function closeModal() {
+    if (!modal || !modalContainer) return;
+    modalContainer.classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }, 200);
+  }
+
+  // Use event delegation for dynamic or multiple triggers
+  document.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const trigger = target.closest(".open-modal-trigger");
+    if (trigger) {
+      const study = JSON.parse((trigger as HTMLElement).dataset.study || "{}");
+      openModal(study);
+    }
+  });
+
+  closeBtn?.addEventListener("click", closeModal);
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+</script>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #0555ab44;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #0555ab88;
+  }
+</style>

@@ -16,6 +16,14 @@
   body {
     @apply bg-[var(--color-surface)] text-slate-900;
   }
+
+  button, 
+  a[href], 
+  input[type="submit"], 
+  input[type="button"],
+  select {
+    @apply cursor-pointer;
+  }
 }
 
 @layer utilities {
