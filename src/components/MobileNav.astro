@@ -14,7 +14,7 @@ import {
   >
     <!-- Navigation Items -->
     <a
-      href="/#inicio"
+      href={`${import.meta.env.BASE_URL}/#inicio`}
       class="flex flex-col items-center justify-center gap-1 group"
     >
       <div
@@ -29,7 +29,7 @@ import {
     </a>
 
     <a
-      href="/estudios"
+      href={`${import.meta.env.BASE_URL}/#estudios`}
       class="flex flex-col items-center justify-center gap-1 group"
     >
       <div
@@ -50,7 +50,7 @@ import {
       >
       </div>
       <a
-        href="#agendar"
+        href={`${import.meta.env.BASE_URL}/#agendar`}
         class="relative w-18 h-18 bg-secondary rounded-full flex items-center justify-center shadow-2xl border-4 border-primary group active:scale-90 transition-all"
       >
         <PlusCircle class="text-white w-9 h-9" stroke-width={2.5} />
@@ -62,7 +62,7 @@ import {
     </div>
 
     <a
-      href="/#proceso"
+      href={`${import.meta.env.BASE_URL}/#proceso`}
       class="flex flex-col items-center justify-center gap-1 group"
     >
       <div
@@ -72,12 +72,12 @@ import {
       </div>
       <span
         class="text-[10px] font-bold text-white/50 uppercase tracking-tighter"
-        >Portal</span
+        >Proceso</span
       >
     </a>
 
     <a
-      href="/#sucursales"
+      href={`${import.meta.env.BASE_URL}/#sucursales`}
       class="flex flex-col items-center justify-center gap-1 group"
     >
       <div
