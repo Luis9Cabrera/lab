@@ -1,0 +1,43 @@
+---
+import Logo from "./Logo.astro";
+---
+
+<nav
+  class="fixed top-0 left-0 w-full z-50 backdrop-blur-md bg-white/80 border-b border-gray-200/20 shadow-lg"
+>
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex md:justify-between items-center h-20 sm:justify-center">
+      {/* Logo */}
+      <a href="/" class="flex items-center gap-3 group">
+        <Logo variant="nav" />
+      </a>
+
+      {/* Desktop Navigation */}
+      <div class="hidden md:flex items-center gap-2 lg:gap-8">
+        {
+          [
+            ["Inicio", "/#inicio"],
+            ["Estudios", "/estudios"],
+            ["Proceso", "/#proceso"],
+            ["Sucursales", "/#sucursales"],
+          ].map(([label, href]) => (
+            <a
+              href={href}
+              class="relative px-3 py-2 text-slate-700 hover:text-primary transition-colors duration-200 font-medium text-sm lg:text-base group"
+            >
+              {label}
+              <span class="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            </a>
+          ))
+        }
+
+        <a
+          href="#agendar"
+          class="ml-4 bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-xl active:scale-95 hover:-translate-y-0.5 flex items-center gap-2"
+        >
+          Agendar ahora
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

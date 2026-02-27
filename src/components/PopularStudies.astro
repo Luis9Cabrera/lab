@@ -1,0 +1,214 @@
+---
+import { studies } from "../data/studies";
+import { Info, ClipboardList, History, CheckCircle2 } from "lucide-astro";
+
+const popularStudies = studies.slice(0, 6);
+---
+
+<section id="servicios" class="py-24">
+  <div class="container mx-auto px-6">
+    <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+      <div class="max-w-xl">
+        <h2 class="text-3xl md:text-5xl font-bold text-primary mb-4">
+          Estudios Populares
+        </h2>
+        <p class="text-slate-600">
+          Estudios clínicos esenciales realizados con atención profesional y enfoque en tu bienestar.
+        </p>
+      </div>
+      <a
+        href="/estudios"
+        class="text-secondary font-bold flex items-center gap-2 hover:underline"
+      >
+        Ver catálogo completo →
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {popularStudies.map((study) => (
+        <div class="relative glass p-8 rounded-[2.5rem] overflow-hidden group hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-slate-100/50">
+
+          <!-- Watermark -->
+          <div class="absolute right-6 bottom-6 w-24 h-24 text-secondary/5 group-hover:text-secondary/10 transition-all pointer-events-none">
+            <study.icon class="w-full h-full" />
+          </div>
+
+          <div class="flex justify-between items-start mb-6">
+            <div class="p-4 bg-secondary/10 rounded-2xl text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-500">
+              <study.icon class="w-7 h-7" />
+            </div>
+            <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-xs font-bold uppercase tracking-wider">
+              {study.category}
+            </span>
+          </div>
+
+          <h3 class="text-2xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors line-clamp-1">
+            {study.name}
+          </h3>
+
+          <p class="text-slate-500 mb-8 line-clamp-2">
+            {study.desc}
+          </p>
+
+          <button
+            class="open-popular-modal w-full py-4 bg-slate-50 hover:bg-primary text-primary hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
+            data-study={JSON.stringify(study)}
+          >
+            Ver información completa
+            <Info class="w-5 h-5 opacity-50 group-hover/btn:opacity-100 transition-opacity" />
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- REUSABLE MODAL (Home Version) -->
+<div id="homeStudyModal" class="fixed inset-0 bg-primary/40 backdrop-blur-md hidden items-center justify-center z-[100] px-4 py-8 overflow-y-auto">
+  <div id="homeModalContainer" class="bg-white w-full max-w-4xl rounded-[3rem] shadow-2xl relative transform scale-95 opacity-0 transition-all duration-300 max-h-full flex flex-col">
+    
+    <!-- Close Button -->
+    <button id="closeHomeModal" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-slate-100 text-slate-400 hover:text-primary hover:bg-slate-200 flex items-center justify-center transition-all z-10">
+      <span class="text-2xl">✕</span>
+    </button>
+
+    <div class="p-8 md:p-12 overflow-y-auto custom-scrollbar">
+      <div class="flex flex-col lg:flex-row gap-12">
+        
+        <!-- Left Content -->
+        <div class="lg:w-1/2">
+          <span id="hmCategory" class="text-secondary font-black tracking-widest uppercase text-sm mb-2 block">Cargando...</span>
+          <h2 id="hmTitle" class="text-3xl md:text-4xl font-black text-primary mb-6 leading-tight">Nombre del Estudio</h2>
+          <p id="hmDetails" class="text-slate-600 mb-8 leading-relaxed">Descripción detallada...</p>
+          
+          <div class="space-y-4">
+            <h4 class="font-bold text-primary flex items-center gap-2">
+              <ClipboardList class="w-5 h-5 text-secondary" />
+              ¿Qué incluye?
+            </h4>
+            <ul id="hmIncludes" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Items will be injected here -->
+            </ul>
+          </div>
+        </div>
+
+        <!-- Right Content -->
+        <div class="lg:w-1/2 space-y-8">
+          <div class="bg-blue-50/50 p-8 rounded-3xl border border-blue-100/50">
+            <h4 class="font-bold text-primary flex items-center gap-2 mb-6">
+              <History class="w-5 h-5 text-secondary" />
+              Recomendaciones Previas
+            </h4>
+            <div id="hmPre" class="space-y-4">
+              <!-- Pre will be injected here -->
+            </div>
+          </div>
+
+          <div class="bg-green-50/30 p-8 rounded-3xl border border-green-100/50">
+            <h4 class="font-bold text-primary flex items-center gap-2 mb-6">
+              <CheckCircle2 class="w-5 h-5 text-green-500" />
+              Cuidados Post-Estudio
+            </h4>
+            <div id="hmPost" class="space-y-4">
+              <!-- Post will be injected here -->
+            </div>
+          </div>
+
+          <a href="https://wa.me/5212331102038" target="_blank" class="w-full bg-secondary hover:bg-secondary/90 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl transition-all">
+            Agendar estudio vía WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('homeStudyModal');
+  const modalContainer = document.getElementById('homeModalContainer');
+  const closeBtn = document.getElementById('closeHomeModal');
+
+  function openModal(study: any) {
+    if(!modal || !modalContainer) return;
+
+    document.getElementById('hmCategory')!.textContent = study.category;
+    document.getElementById('hmTitle')!.textContent = study.name;
+    document.getElementById('hmDetails')!.textContent = study.details;
+    
+    const includesList = document.getElementById('hmIncludes')!;
+    includesList.innerHTML = study.includes.map((i: string) => `
+      <li class="flex items-center gap-2 text-slate-600 text-sm">
+        <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+        ${i}
+      </li>
+    `).join('');
+
+    const preContainer = document.getElementById('hmPre')!;
+    preContainer.innerHTML = study.preparations.map((p: string) => `
+      <div class="flex gap-3">
+        <div class="w-6 h-6 rounded-full bg-blue-100 text-primary flex items-center justify-center shrink-0">
+          <span class="text-[10px] font-bold">!</span>
+        </div>
+        <p class="text-sm text-slate-600">${p}</p>
+      </div>
+    `).join('');
+
+    const postContainer = document.getElementById('hmPost')!;
+    postContainer.innerHTML = study.postRecommendations.map((p: string) => `
+      <div class="flex gap-3">
+        <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+          <span class="text-[10px] font-bold">✓</span>
+        </div>
+        <p class="text-sm text-slate-600">${p}</p>
+      </div>
+    `).join('');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => {
+      modalContainer.classList.remove('scale-95', 'opacity-0');
+      modalContainer.classList.add('scale-100', 'opacity-100');
+    }, 10);
+  }
+
+  function closeModal() {
+    if(!modal || !modalContainer) return;
+    modalContainer.classList.add('scale-95', 'opacity-0');
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = '';
+    }, 200);
+  }
+
+  document.querySelectorAll('.open-popular-modal').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const study = JSON.parse((btn as HTMLElement).dataset.study || '{}');
+      openModal(study);
+    });
+  });
+
+  closeBtn?.addEventListener('click', closeModal);
+  modal?.addEventListener('click', (e) => {
+    if(e.target === modal) closeModal();
+  });
+</script>
+
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #0555AB44;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #0555AB88;
+  }
+</style>

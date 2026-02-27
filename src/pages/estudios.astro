@@ -1,0 +1,389 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { studies } from "../data/studies";
+import {
+  Search,
+  Filter,
+  ArrowLeft,
+  Info,
+  CheckCircle2,
+  History,
+  ClipboardList,
+} from "lucide-astro";
+
+const categories = ["Todos", "Rutina", "Hormonal", "Preventivo", "Especial"];
+---
+
+<Layout title="Catálogo de Estudios | Venecia Laboratorio Clínico">
+  <main class="pt-32 pb-24 bg-surface min-h-screen">
+    <div class="container mx-auto px-6">
+      <!-- Header -->
+      <div
+        class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6"
+      >
+        <div>
+          <a
+            href="/"
+            class="flex items-center gap-2 text-primary font-bold mb-4 hover:gap-3 transition-all"
+          >
+            <ArrowLeft class="w-5 h-5" />
+            Volver al inicio
+          </a>
+          <h1 class="text-4xl md:text-5xl font-black text-primary">
+            Catálogo de Estudios
+          </h1>
+          <p class="text-slate-600 mt-2">
+            Encuentra información detallada y preparaciones para tus análisis.
+          </p>
+        </div>
+      </div>
+
+      <!-- Search and Filter Bar -->
+      <div class="flex flex-col lg:flex-row gap-6 mb-12">
+        <div class="flex-1 relative">
+          <Search
+            class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5"
+          />
+          <input
+            type="text"
+            id="studySearch"
+            placeholder="Buscar por nombre de estudio..."
+            class="w-full pl-12 pr-6 py-4 rounded-2xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary shadow-sm transition-all"
+          />
+        </div>
+        <div class="flex gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
+          {
+            categories.map((cat) => (
+              <button
+                class={`category-btn px-6 py-4 rounded-2xl font-bold transition-all whitespace-nowrap border ${cat === "Todos" ? "bg-primary text-white border-primary shadow-lg" : "bg-white text-slate-600 border-slate-200 hover:border-secondary hover:text-secondary"}`}
+                data-category={cat}
+              >
+                {cat}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Studies Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="studiesGrid">
+        {
+          studies.map((study) => (
+            <div
+              class="study-card group relative bg-white p-8 rounded-[2.5rem] border border-slate-100 hover:border-secondary/30 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
+              data-category={study.category}
+              data-name={study.name.toLowerCase()}
+            >
+              <div class="flex justify-between items-start mb-6">
+                <div class="p-4 bg-secondary/10 rounded-2xl text-secondary group-hover:bg-secondary group-hover:text-white transition-all duration-500">
+                  <study.icon class="w-7 h-7" />
+                </div>
+                <span class="px-3 py-1 bg-slate-100 text-slate-500 rounded-full text-xs font-bold uppercase tracking-wider">
+                  {study.category}
+                </span>
+              </div>
+
+              <h3 class="text-2xl font-bold text-primary mb-3 group-hover:text-secondary transition-colors">
+                {study.name}
+              </h3>
+              <p class="text-slate-500 mb-8 line-clamp-2">{study.desc}</p>
+
+              <button
+                class="open-modal-btn w-full py-4 bg-slate-50 hover:bg-primary text-primary hover:text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 group/btn"
+                data-study={JSON.stringify(study)}
+              >
+                Ver información completa
+                <Info class="w-5 h-5 opacity-50 group-hover/btn:opacity-100 transition-opacity" />
+              </button>
+            </div>
+          ))
+        }
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyState" class="hidden text-center py-20">
+        <div
+          class="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6"
+        >
+          <Search class="w-10 h-10 text-slate-400" />
+        </div>
+        <h3 class="text-2xl font-bold text-primary">No encontramos estudios</h3>
+        <p class="text-slate-500">Prueba con otro término o categoría.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- REUSABLE MODAL -->
+  <div
+    id="catalogModal"
+    class="fixed inset-0 bg-primary/40 backdrop-blur-md hidden items-center justify-center z-[100] px-4 py-8 overflow-y-auto"
+  >
+    <div
+      id="modalContainer"
+      class="bg-white w-full max-w-4xl rounded-[3rem] shadow-2xl relative transform scale-95 opacity-0 transition-all duration-300 max-h-full flex flex-col"
+    >
+      <!-- Close Button -->
+      <button
+        id="closeCatalogModal"
+        class="absolute top-6 right-6 w-12 h-12 rounded-full bg-slate-100 text-slate-400 hover:text-primary hover:bg-slate-200 flex items-center justify-center transition-all z-10"
+      >
+        <span class="text-2xl">✕</span>
+      </button>
+
+      <div class="p-8 md:p-12 overflow-y-auto custom-scrollbar">
+        <div class="flex flex-col lg:flex-row gap-12">
+          <!-- Left Content -->
+          <div class="lg:w-1/2">
+            <div
+              id="mIcon"
+              class="w-16 h-16 bg-secondary/10 rounded-2xl text-secondary flex items-center justify-center mb-6"
+            >
+              <!-- Icon will be injected here -->
+            </div>
+            <span
+              id="mCategory"
+              class="text-secondary font-black tracking-widest uppercase text-sm mb-2 block"
+              >Cargando...</span
+            >
+            <h2
+              id="mTitle"
+              class="text-3xl md:text-4xl font-black text-primary mb-6 leading-tight"
+            >
+              Nombre del Estudio
+            </h2>
+            <p id="mDetails" class="text-slate-600 mb-8 leading-relaxed">
+              Descripción detallada...
+            </p>
+
+            <div class="space-y-4">
+              <h4 class="font-bold text-primary flex items-center gap-2">
+                <ClipboardList class="w-5 h-5 text-secondary" />
+                ¿Qué incluye?
+              </h4>
+              <ul id="mIncludes" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <!-- Items will be injected here -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Right Content (Recommendations) -->
+          <div class="lg:w-1/2 space-y-8">
+            <div
+              class="bg-blue-50/50 p-8 rounded-3xl border border-blue-100/50"
+            >
+              <h4 class="font-bold text-primary flex items-center gap-2 mb-6">
+                <History class="w-5 h-5 text-secondary" />
+                Recomendaciones Previas
+              </h4>
+              <div id="mPre" class="space-y-4">
+                <!-- Pre will be injected here -->
+              </div>
+            </div>
+
+            <div
+              class="bg-green-50/30 p-8 rounded-3xl border border-green-100/50"
+            >
+              <h4 class="font-bold text-primary flex items-center gap-2 mb-6">
+                <CheckCircle2 class="w-5 h-5 text-green-500" />
+                Cuidados Post-Estudio
+              </h4>
+              <div id="mPost" class="space-y-4">
+                <!-- Post will be injected here -->
+              </div>
+            </div>
+
+            <a
+              id="mAction"
+              href="https://wa.me/5212331102038"
+              target="_blank"
+              class="w-full bg-secondary hover:bg-secondary/90 text-white py-5 rounded-2xl font-bold flex items-center justify-center gap-3 shadow-xl transition-all"
+            >
+              Agendar estudio vía WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Filters and Search logic
+  const searchInput = document.getElementById(
+    "studySearch",
+  ) as HTMLInputElement;
+  const categoryBtns = document.querySelectorAll(".category-btn");
+  const studyCards = document.querySelectorAll(".study-card");
+  const emptyState = document.getElementById("emptyState");
+
+  let currentFilter = "Todos";
+  let searchTerm = "";
+
+  function filterStudies() {
+    let visibleCount = 0;
+    studyCards.forEach((card) => {
+      const element = card as HTMLElement;
+      const category = element.dataset.category || "";
+      const name = element.dataset.name || "";
+
+      const matchesFilter =
+        currentFilter === "Todos" || category === currentFilter;
+      const matchesSearch = name.includes(searchTerm);
+
+      if (matchesFilter && matchesSearch) {
+        element.style.display = "block";
+        visibleCount++;
+      } else {
+        element.style.display = "none";
+      }
+    });
+
+    if (visibleCount === 0) {
+      emptyState?.classList.remove("hidden");
+    } else {
+      emptyState?.classList.add("hidden");
+    }
+  }
+
+  searchInput?.addEventListener("input", (e) => {
+    searchTerm = (e.target as HTMLInputElement).value.toLowerCase();
+    filterStudies();
+  });
+
+  categoryBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      categoryBtns.forEach((b) => {
+        b.classList.remove(
+          "bg-primary",
+          "text-white",
+          "border-primary",
+          "shadow-lg",
+        );
+        b.classList.add("bg-white", "text-slate-600", "border-slate-200");
+      });
+      btn.classList.add(
+        "bg-primary",
+        "text-white",
+        "border-primary",
+        "shadow-lg",
+      );
+      btn.classList.remove("bg-white", "text-slate-600", "border-slate-200");
+
+      currentFilter = (btn as HTMLElement).dataset.category || "Todos";
+      filterStudies();
+    });
+  });
+
+  // Modal logic
+  const modal = document.getElementById("catalogModal");
+  const modalContainer = document.getElementById("modalContainer");
+  const closeBtn = document.getElementById("closeCatalogModal");
+
+  function openModal(study: any) {
+    if (!modal || !modalContainer) return;
+
+    // Inject data
+    document.getElementById("mCategory")!.textContent = study.category;
+    document.getElementById("mTitle")!.textContent = study.name;
+    document.getElementById("mDetails")!.textContent = study.details;
+
+    // Includes
+    const includesList = document.getElementById("mIncludes")!;
+    includesList.innerHTML = study.includes
+      .map(
+        (i: string) => `
+      <li class="flex items-center gap-2 text-slate-600 text-sm">
+        <span class="w-1.5 h-1.5 bg-secondary rounded-full"></span>
+        ${i}
+      </li>
+    `,
+      )
+      .join("");
+
+    // Pre Recommendations
+    const preContainer = document.getElementById("mPre")!;
+    preContainer.innerHTML = study.preparations
+      .map(
+        (p: string) => `
+      <div class="flex gap-3">
+        <div class="w-6 h-6 rounded-full bg-blue-100 text-primary flex items-center justify-center shrink-0">
+          <span class="text-[10px] font-bold">!</span>
+        </div>
+        <p class="text-sm text-slate-600">${p}</p>
+      </div>
+    `,
+      )
+      .join("");
+
+    // Post Recommendations
+    const postContainer = document.getElementById("mPost")!;
+    postContainer.innerHTML = study.postRecommendations
+      .map(
+        (p: string) => `
+      <div class="flex gap-3">
+        <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+          <span class="text-[10px] font-bold">✓</span>
+        </div>
+        <p class="text-sm text-slate-600">${p}</p>
+      </div>
+    `,
+      )
+      .join("");
+
+    // Show modal
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => {
+      modalContainer.classList.remove("scale-95", "opacity-0");
+      modalContainer.classList.add("scale-100", "opacity-100");
+    }, 10);
+  }
+
+  function closeModal() {
+    if (!modal || !modalContainer) return;
+    modalContainer.classList.add("scale-95", "opacity-0");
+    setTimeout(() => {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }, 200);
+  }
+
+  document.querySelectorAll(".open-modal-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const study = JSON.parse((btn as HTMLElement).dataset.study || "{}");
+      openModal(study);
+    });
+  });
+
+  closeBtn?.addEventListener("click", closeModal);
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
+  });
+</script>
+
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #0555ab44;
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #0555ab88;
+  }
+</style>

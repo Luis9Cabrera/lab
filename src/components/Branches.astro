@@ -1,0 +1,68 @@
+---
+import { MapPin, Phone, Clock } from "lucide-astro";
+
+const branches = [
+  {
+    name: "Sucursal Matriz",
+    address: "Carretera Federal 705, C. 7 Sur, 73700 Zaragoza, Pue.",
+    phone: "+52 233 110 2038",
+    hours: "Lunes a Viernes: 7:00 AM - 4:00 PM | Sábado: 7:00 AM - 2:00 PM",
+  },
+];
+---
+
+<section id="sucursales" class="py-24 bg-surface">
+  <div class="container mx-auto px-6">
+    <div class="grid lg:grid-cols-2 gap-16 items-center">
+      <div>
+        <h2 class="text-4xl font-bold text-primary mb-8">
+          Nuestras Sucursales
+        </h2>
+        <div class="space-y-8">
+          {
+            branches.map((branch) => (
+              <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                <h3 class="text-xl font-bold text-primary mb-3">
+                  {branch.name}
+                </h3>
+                <div class="space-y-2 text-slate-500">
+                  <p class="flex items-start gap-3">
+                    <MapPin class="text-secondary shrink-0 w-5 h-5" />
+                    {branch.address}
+                  </p>
+                  <p class="flex items-center gap-3">
+                    <Phone class="text-secondary shrink-0 w-5 h-5" />
+                    {branch.phone}
+                  </p>
+                  <p class="flex items-start gap-3">
+                    <Clock class="text-secondary shrink-0 w-5 h-5" />
+                    {branch.hours}
+                  </p>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div
+        class="h-[500px] bg-white rounded-[3rem] shadow-xl relative overflow-hidden group border border-slate-100"
+      >
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3754.700690966683!2d-97.5581969241771!3d19.767867281584486!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85dabd334ff985c9%3A0x666abbfd7777f6c1!2sVenecia%20Laboratorio%20Cl%C3%ADnico!5e0!3m2!1ses-419!2smx!4v1772224133942!5m2!1ses-419!2smx"
+          class="w-full h-full grayscale hover:grayscale-0 transition-all duration-700"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div
+          class="absolute bottom-10 left-1/2 -translate-x-1/2 glass px-6 py-3 rounded-full font-bold text-primary shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer hover:bg-secondary hover:text-white"
+        >
+          <a href="https://maps.app.goo.gl/W8JobcmyeNNVKQzw6" target="_blank"
+            >Abrir en Google Maps</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

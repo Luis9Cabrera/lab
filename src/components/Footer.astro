@@ -1,0 +1,113 @@
+---
+import Logo from "./Logo.astro";
+import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-astro";
+---
+
+<footer class="bg-primary pt-24 pb-12 text-white">
+  <div class="container mx-auto px-6">
+    <div
+      class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20 border-b border-white/10 pb-20"
+    >
+      <div class="col-span-1 lg:col-span-1">
+        <a href="/" class="mb-8 block">
+          <Logo variant="footer" />
+        </a>
+        <p class="text-white/60 leading-relaxed max-w-xs">
+          Liderazgo en diagnóstico clínico con tecnología de punta y calidez
+          humana en cada atención en Zaragoza, Puebla.
+        </p>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-black mb-8">Navegación</h4>
+        <ul class="space-y-4 text-white/70">
+          <li>
+            <a href="#inicio" class="hover:text-secondary transition-colors"
+              >Inicio</a
+            >
+          </li>
+          <li>
+            <a href="#servicios" class="hover:text-secondary transition-colors"
+              >Servicios</a
+            >
+          </li>
+          <li>
+            <a href="#proceso" class="hover:text-secondary transition-colors"
+              >Nuestro Proceso</a
+            >
+          </li>
+          <li>
+            <a href="#sucursales" class="hover:text-secondary transition-colors"
+              >Sucursales</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-black mb-8">Legales</h4>
+        <ul class="space-y-4 text-white/70">
+          <li>
+            <a href="#" class="hover:text-secondary transition-colors"
+              >Aviso de Privacidad</a
+            >
+          </li>
+          <li>
+            <a href="#" class="hover:text-secondary transition-colors"
+              >Términos y Condiciones</a
+            >
+          </li>
+          <li>
+            <a href="#" class="hover:text-secondary transition-colors"
+              >Preparación para estudios</a
+            >
+          </li>
+          <li>
+            <a href="#" class="hover:text-secondary transition-colors"
+              >Portal de Facturación</a
+            >
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="text-lg font-black mb-8">Contacto</h4>
+        <div class="space-y-4 text-white/70">
+          <p class="flex items-center gap-3">
+            <Phone class="text-secondary w-4 h-4 shrink-0" />
+            233 110 2038
+          </p>
+          <p class="flex items-center gap-3">
+            <Mail class="text-secondary w-4 h-4 shrink-0" />
+            venecialaboratorioclinico438@gmail.com
+          </p>
+          <p class="flex items-center gap-3">
+            <MapPin class="text-secondary w-4 h-4 shrink-0" />
+            Zaragoza, Puebla, México.
+          </p>
+        </div>
+        <div class="flex gap-4 mt-8">
+          <a
+            href="https://www.facebook.com/profile.php?id=61588276029050"
+            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-secondary transition-all"
+          >
+            <Facebook class="w-5 h-5 text-white" />
+          </a>
+          <a
+            href="#"
+            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-secondary transition-all"
+          >
+            <Instagram class="w-5 h-5 text-white" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-col md:flex-row justify-between items-center gap-6 text-white/40 text-sm"
+    >
+      <p>© 2026 Venecia Laboratorio Clínico. Todos los derechos reservados.</p>
+      <p>Diseño premium por <span class="text-white/60">Luis Cabrera</span></p>
+    </div>
+  </div>
+</footer>

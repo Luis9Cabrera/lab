@@ -1,0 +1,57 @@
+---
+import { Users, FileText, CalendarClock, Heart } from "lucide-astro";
+
+const features = [
+  {
+    title: "Equipo Profesional",
+    desc: "Personal capacitado y comprometido con brindarte un servicio confiable y humano.",
+    icon: Users,
+  },
+  {
+    title: "Resultados Digitales",
+    desc: "Recibe tus resultados de manera práctica y segura desde tu celular o correo electrónico.",
+    icon: FileText,
+  },
+  {
+    title: "Atención Ágil",
+    desc: "Procesos organizados para ofrecerte una experiencia rápida y cómoda.",
+    icon: CalendarClock,
+  },
+  {
+    title: "Compromiso con tu Salud",
+    desc: "Trabajamos con responsabilidad y cuidado en cada estudio que realizamos.",
+    icon: Heart,
+  },
+];
+---
+
+<section id="servicios" class="py-24 bg-white">
+  <div class="container mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-3xl md:text-5xl font-bold text-primary mb-6">
+        ¿Por qué elegirnos?
+      </h2>
+      <p class="text-lg text-slate-600 italic">
+        Brindamos un servicio de calidad y humanismo en cada paciente.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {
+        features.map((item) => (
+          <div class="group p-8 rounded-3xl bg-slate-50 hover:bg-primary transition-all duration-500 border border-slate-100 hover:shadow-2xl hover:-translate-y-2">
+            <div class="w-14 h-14 bg-white rounded-2xl flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-transform">
+              <item.icon class="text-primary w-8 h-8" />
+            </div>
+            <h3 class="text-xl font-bold text-primary mb-4 group-hover:text-white transition-colors">
+              {item.title}
+            </h3>
+            <p class="text-slate-500 group-hover:text-white/80 leading-relaxed transition-colors">
+              {item.desc}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
