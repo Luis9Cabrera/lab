@@ -9,27 +9,17 @@ const { variant = "nav", className = "" } = Astro.props;
 
 <div class={`flex items-center gap-3 group ${className}`}>
   <div
-    class={`relative transition-transform duration-300 group-hover:scale-105 ${variant === "nav" ? "w-16 h-16 sm:w-20 sm:h-20" : "w-12 h-12"}`}
+    class={`relative transition-all duration-300 group-hover:scale-105 ${
+      variant === "nav" ? "w-40 h-auto" : "w-48 h-auto"
+    }`}
   >
     <img
-      src={`${import.meta.env.BASE_URL}/logo-ven.png`}
+      src={`${import.meta.env.BASE_URL}/logo-ven.svg`}
       alt="Logo Venecia Laboratorio Clínico"
       class="w-full h-full object-contain"
       loading="eager"
-      width={80}
+      width={120}
       height={80}
     />
-  </div>
-  <div class="flex flex-col leading-tight">
-    <span
-      class={`font-bold tracking-tight ${variant === "nav" ? "text-xl sm:text-2xl text-primary" : "text-xl text-white"}`}
-    >
-      Venecia
-    </span>
-    <span
-      class={`text-sm font-bold ${variant === "nav" ? "sm:text-base text-tertiary" : "text-secondary"}`}
-    >
-      Laboratorio Clínico
-    </span>
   </div>
 </div>

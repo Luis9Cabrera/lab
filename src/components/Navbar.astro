@@ -8,7 +8,10 @@ import Logo from "./Logo.astro";
   <div class="container mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex md:justify-between items-center h-20 sm:justify-center">
       {/* Logo */}
-      <a href="/" class="flex items-center gap-3 group">
+      <a
+        href={`${import.meta.env.BASE_URL}/`}
+        class="flex items-center gap-3 group"
+      >
         <Logo variant="nav" />
       </a>
 
@@ -16,7 +19,7 @@ import Logo from "./Logo.astro";
       <div class="hidden md:flex items-center gap-2 lg:gap-8">
         {
           [
-            ["Inicio", "#inicio"],
+            ["Inicio", `${import.meta.env.BASE_URL}/`],
             ["Estudios", `${import.meta.env.BASE_URL}/estudios`],
             ["Proceso", `${import.meta.env.BASE_URL}/#proceso`],
             ["Sucursales", `${import.meta.env.BASE_URL}/#sucursales`],
@@ -32,7 +35,8 @@ import Logo from "./Logo.astro";
         }
 
         <a
-          href={`${import.meta.env.BASE_URL}/#agendar`}
+          href="https://wa.me/2331102038?text=Hola%20quiero%20agendar%20un%20estudio"
+          target="_blank"
           class="ml-4 bg-primary hover:bg-primary/90 text-white px-6 py-2.5 rounded-full font-semibold transition-all duration-300 shadow-md hover:shadow-xl active:scale-95 hover:-translate-y-0.5 flex items-center gap-2"
         >
           Agendar ahora
